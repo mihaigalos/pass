@@ -39,3 +39,5 @@ COPY --from=base /src/rage/target/release/rage* /usr/local/bin/
 COPY --from=base /src/just/target/release/just /usr/local/bin/
 
 WORKDIR /src
+ENTRYPOINT [ "just" ]
+CMD [ "help" ]
