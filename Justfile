@@ -57,7 +57,11 @@ _add +input:
    cd secrets/
    
    git pull --ff-only --allow-unrelated-histories
-   echo ${password} > ${secret_file}
+   #echo ${password} > ${secret_file}
+   set -x
+   identities=$(age-plugin-yubikey --identity | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
+
+   echo ${password} | rage ${identities} -o ${secret_file}
    git add .
    git commit -m "Edited ${secret_file}"
    git push
