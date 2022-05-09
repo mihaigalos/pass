@@ -1,3 +1,4 @@
+set positional-arguments
 set shell := ["bash", "-uc"]
 
 _default:
@@ -18,7 +19,7 @@ build_docker:
     docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
 
 # Get the password for the requested input.
-pass input:
+pass +input:
    docker run --rm -it \
    -v $(pwd):/src \
    -v $(realpath Justfile):/src/Justfile \
@@ -27,8 +28,11 @@ pass input:
    --user $UID:$UID \
    mihaigalos/pass:0.0.1 _pass {{ input }}
 
-_pass input:
-    git clone {{ secrets_repo }} secret && cd secret
+_pass +input: _setup && _teardown
+   #!/bin/bash
+   arg_count=$#
+   git clone --quiet {{ secrets_repo }} secret && cd secret
+   [[ $arg_count == 1 ]] && echo Decrypting. || echo Adding.
 
 test:
     echo test
@@ -44,3 +48,9 @@ debug +args:
 
 _debug +args:
    bash -c "{{ args }}"
+
+_setup:
+   age-plugin-yubikey --identity > identity 2>/dev/null
+
+_teardown:
+   rm -rf secret/ identity
