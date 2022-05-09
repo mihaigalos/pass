@@ -32,7 +32,7 @@ pass +input:
 _pass +input: _setup && _teardown
    #!/bin/bash
    arg_count=$#
-   git clone --quiet {{ secrets_repo }} secret && cd secret
+   git clone --quiet {{ secrets_repo }} secrets
    [[ $arg_count == 1 ]] && echo Decrypting. || just _add {{ input }}
 
 test:
@@ -54,15 +54,13 @@ _add +input:
    read -s password
    echo
 
-   cd secret/
-   git pull --ff-only
-   #echo ${password} > ${secret_file}
-   #git add .
-   #git commit --amend --no-edit
-   #git push
+   cd secrets/
    
-   
-   
+   git pull --ff-only --allow-unrelated-histories
+   echo ${password} > ${secret_file}
+   git add .
+   git commit -m "Edited ${secret_file}"
+   git push
 
 _debug +args:
    bash -c "{{ args }}"
@@ -71,4 +69,4 @@ _setup:
    age-plugin-yubikey --identity > identity 2>/dev/null
 
 _teardown:
-   rm -rf secret/ identity
+   rm -rf secrets/ identity
