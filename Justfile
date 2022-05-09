@@ -58,10 +58,11 @@ _add +input:
    
    git pull --ff-only --allow-unrelated-histories
    #echo ${password} > ${secret_file}
-   set -x
+
+   echo "Plugin all YubiKeys now. It is assumed they are already set up using: https://github.com/str4d/age-plugin-yubikey#configuration"
    identities=$(age-plugin-yubikey --identity | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
 
-   echo ${password} | rage ${identities} -o ${secret_file}
+   echo "${password}" | rage ${identities} -o ${secret_file}
    git add .
    git commit -m "Edited ${secret_file}"
    git push
