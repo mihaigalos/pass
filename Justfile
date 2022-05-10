@@ -31,12 +31,10 @@ pass +input:
 
 _pass +input: _setup && _teardown
    #!/bin/bash
+   set -x
    arg_count=$#
    git clone --quiet {{ secrets_repo }} secrets
    [[ $arg_count == 1 ]] && just _get {{ input }} || just _add {{ input }}
-
-test:
-    echo test
 
 debug +args:
    docker run --rm -it \
@@ -49,9 +47,8 @@ debug +args:
 
 _add +input:
    #!/bin/bash
+   set -x
    secret_file=$2 
-   echo -n "Password: "
-   read -s password
    echo
 
    cd secrets/
@@ -80,7 +77,19 @@ _debug +args:
    bash -c "{{ args }}"
 
 _setup:
-   age-plugin-yubikey --identity > identity 2>/dev/null
+   #!/bin/bash
+   git clone --quiet {{ secrets_repo }} secrets
+   age-plugin-yubikey --identity > secrets/identity 2>/dev/null
 
 _teardown:
    rm -rf secrets/ identity
+
+test:
+   #!/bin/bash
+   err() { echo -e "\e[1;31m${@}\e[0m" >&2; exit 1; }
+   ok() { echo -e "\e[1;32mOK\e[0m"; }
+   test_secret_contents='!"§$%&/()=?#'
+   just _add test_secret_name $test_secret_contents
+   echo ---------------------
+   just _pass test_secret_name
+
