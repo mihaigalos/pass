@@ -33,7 +33,7 @@ _pass +input: _setup && _teardown
    #!/bin/bash
    arg_count=$#
    git clone --quiet {{ secrets_repo }} secrets
-   [[ $arg_count == 1 ]] && echo Decrypting. || just _add {{ input }}
+   [[ $arg_count == 1 ]] && just _get {{ input }} || just _add {{ input }}
 
 test:
     echo test
@@ -57,7 +57,6 @@ _add +input:
    cd secrets/
    
    git pull --ff-only --allow-unrelated-histories
-   #echo ${password} > ${secret_file}
 
    echo
    echo "🔑 Plugin all YubiKeys now. It is assumed they are already set up using: https://github.com/str4d/age-plugin-yubikey#configuration"
@@ -69,6 +68,13 @@ _add +input:
    git add .
    git commit -m "Edited ${secret_file}"
    git push
+
+_get +input:
+   #!/bin/bash
+   secret_file=$1
+   cd secrets/
+   age-plugin-yubikey --identity > identity
+   cat {{ input }} | rage -d -i identity
 
 _debug +args:
    bash -c "{{ args }}"
