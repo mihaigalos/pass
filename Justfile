@@ -47,8 +47,8 @@ debug +args:
 
 _add +input:
    #!/bin/bash
-   set -x
    secret_file=$2 
+   echo -n "Password: " && read -s password
    echo
 
    cd secrets/
@@ -57,7 +57,7 @@ _add +input:
 
    echo
    echo "🔑 Plugin all YubiKeys now. It is assumed they are already set up using: https://github.com/str4d/age-plugin-yubikey#configuration"
-   read -p "Press enter to continue."
+   read -p "Press ENTER to continue."
 
    identities=$(age-plugin-yubikey --identity | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
 
