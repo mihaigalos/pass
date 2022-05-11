@@ -88,7 +88,9 @@ test:
    #!/bin/bash
    err() { echo -e "\e[1;31m${@}\e[0m" >&2; exit 1; }
    ok() { echo -e "\e[1;32mOK\e[0m"; }
+   highlight() { echo; echo -e "\e[1;37m${@}\e[0m"; }
+   highlight --------------------- Testing set ---------------------
    just pass add test_secret_name
-   echo ---------------------
+   highlight --------------------- Testing get ---------------------
    just pass test_secret_name
 
