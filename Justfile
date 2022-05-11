@@ -34,7 +34,7 @@ _pass +input: _setup && _teardown
    set -x
    arg_count=$#
    git clone --quiet {{ secrets_repo }} secrets
-   [[ $arg_count == 1 ]] && just _get {{ input }} || just _add {{ input }}
+   [[ $arg_count == 1 ]] && just _get {{ input }} || just _set {{ input }}
 
 debug +args:
    docker run --rm -it \
@@ -45,7 +45,7 @@ debug +args:
    --user $UID:$UID \
    mihaigalos/pass:0.0.1 _debug {{ args }}
 
-_add +input:
+_set +input:
    #!/bin/bash
    secret_file=$2 
    echo -n "Password: " && read -s password
@@ -88,8 +88,7 @@ test:
    #!/bin/bash
    err() { echo -e "\e[1;31m${@}\e[0m" >&2; exit 1; }
    ok() { echo -e "\e[1;32mOK\e[0m"; }
-   test_secret_contents='!"§$%&/()=?#'
-   just _add test_secret_name $test_secret_contents
+   just _set test_secret_name
    echo ---------------------
    just _pass test_secret_name
 
