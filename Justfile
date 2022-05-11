@@ -34,7 +34,7 @@ _pass +input: _setup && _teardown
    set -x
    arg_count=$#
    git clone --quiet {{ secrets_repo }} secrets
-   [[ $arg_count == 1 ]] && just _get {{ input }} || just _set {{ input }}
+   [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
 
 debug +args:
    docker run --rm -it \
@@ -45,7 +45,7 @@ debug +args:
    --user $UID:$UID \
    mihaigalos/pass:0.0.1 _debug {{ args }}
 
-_set +input:
+_encrypt +input:
    #!/bin/bash
    secret_file=$2 
    echo -n "Password: " && read -s password
@@ -66,7 +66,7 @@ _set +input:
    git commit -m "Edited ${secret_file}"
    git push
 
-_get +input:
+_decrypt +input:
    #!/bin/bash
    secret_file=$1
    cd secrets/
@@ -89,8 +89,8 @@ test:
    err() { echo -e "\e[1;31m${@}\e[0m" >&2; exit 1; }
    ok() { echo -e "\e[1;32mOK\e[0m"; }
    highlight() { echo; echo -e "\e[1;37m${@}\e[0m"; }
-   highlight --------------------- Testing set ---------------------
+   highlight --------------------- Testing encrypt ---------------------
    just pass add test_secret_name
-   highlight --------------------- Testing get ---------------------
+   highlight --------------------- Testing decrypt ---------------------
    just pass test_secret_name
 
