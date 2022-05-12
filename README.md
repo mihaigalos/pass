@@ -22,7 +22,7 @@ OS: Linux.
 Prerequisites:
 * [`just`](https://github.com/casey/just) in `$PATH`.
 * Run `just configure_yubikey`.
-* Edit the `Justfile` `secrets_repo` field to point to a repository to store the secrets to.
+* Run `just configure_secrets_repo <your_git_secrets_repository>`.
 
 ## Usage
 
