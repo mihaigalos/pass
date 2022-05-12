@@ -21,7 +21,7 @@ OS: Linux.
 
 Prerequisites:
 * [`just`](https://github.com/casey/just) in `$PATH`.
-* Run `just install`.
+* Run `just install <your secrets repo>`.
 
 ## Usage
 
