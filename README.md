@@ -21,7 +21,7 @@ OS: Linux.
 
 Prerequisites:
 * [`just`](https://github.com/casey/just) in `$PATH`.
-* Preconfigured YubiKeys. See [this](https://github.com/str4d/age-plugin-yubikey#configuration) for more info.
+* Run `just configure_yubikey`.
 * Edit the `Justfile` `secrets_repo` field to point to a repository to store the secrets to.
 
 ## Usage

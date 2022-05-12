@@ -28,7 +28,7 @@ pass +input:
    -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
    -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
    --user $UID:$UID \
-   mihaigalos/pass:0.0.1 _pass {{ input }}
+   {{ docker_image_dockerhub }} _pass {{ input }}
 
 _pass +input: _setup && _teardown
    #!/bin/bash
@@ -43,7 +43,20 @@ debug +args:
    -v /tmp:/tmp \
    -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
    --user $UID:$UID \
-   mihaigalos/pass:0.0.1 _debug {{ args }}
+   {{ docker_image_dockerhub }} _debug {{ args }}
+
+configure_yubikey:
+   docker run --rm -it \
+   -v $(pwd):/src \
+   -v $(realpath Justfile):/src/Justfile \
+   -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
+   -v /tmp:/tmp \
+   -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
+   --user $UID:$UID \
+   {{ docker_image_dockerhub }} _configure_yubikey
+
+_configure_yubikey:
+   age-plugin-yubikey
 
 _encrypt +input:
    #!/bin/bash
