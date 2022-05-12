@@ -2,6 +2,8 @@
 
 YubiKey-encrypted Secrets-as-Code for git.
 
+`pass` runs in the command line.
+
 ## Why?
 
 Online password managers have already reached maturity, however `git` can be used to store encrypted passwords and files just fine.
@@ -25,9 +27,9 @@ Prerequisites:
 ## Usage
 
 ```bash
-just pass add mysecretname # Asks for a password, encrypts it to a file "mysecretname" and commit+pushes it to the secrets repository.
-just pass add_file /tmp/mysecretfile # Asks for a password, encrypts it to a file "mysecretfile" and commit+pushes it to the secrets repository.
-just pass mysecretname # Decrypts the secret file "mysecretname".
+$ just pass add mysecretname # Asks for a password, encrypts it to a file "mysecretname" and commit+pushes it to the secrets repository.
+$ just pass add_file /tmp/mysecretfile # Asks for a password, encrypts it to a file "mysecretfile" and commit+pushes it to the secrets repository.
+$ just pass mysecretname # Decrypts the secret file "mysecretname".
 ```
 
 # Acknowledgements
