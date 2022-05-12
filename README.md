@@ -24,6 +24,6 @@ Prerequisites: [`just`](https://github.com/casey/just) in `$PATH`.
 ## Usage
 
 ```bash
-pass add mysecretname
+just pass add mysecretname # Asks for a password, encrypts it to a file "mysecretname" and commit+pushes it to the secrets repository.
 ```
 
