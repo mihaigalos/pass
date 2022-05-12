@@ -24,8 +24,9 @@ pass +input:
    -v $(pwd):/src \
    -v $(realpath Justfile):/src/Justfile \
    -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
-   -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
+   -v /tmp:/tmp \
    -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
+   -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
    --user $UID:$UID \
    mihaigalos/pass:0.0.1 _pass {{ input }}
 
@@ -39,6 +40,7 @@ debug +args:
    -v $(pwd):/src \
    -v $(realpath Justfile):/src/Justfile \
    -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
+   -v /tmp:/tmp \
    -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
    --user $UID:$UID \
    mihaigalos/pass:0.0.1 _debug {{ args }}
@@ -59,7 +61,9 @@ _encrypt +input:
 
    identities=$(age-plugin-yubikey --identity | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
 
-   echo "${password}" | rage ${identities} -o ${secret_file}
+   [ $1 = "add" ] && echo "${password}" | rage ${identities} -o ${secret_file} || true
+   [ $1 = "add_file" ] && cat $2 | rage ${identities} -o $(basename $2) || true
+
    git add .
    git commit -m "Edited ${secret_file}"
    git push
