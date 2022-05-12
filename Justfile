@@ -20,6 +20,20 @@ build_docker:
 
 # Get the password for the requested input.
 pass +input:
+   just _run _pass {{ input }}
+
+_pass +input: _setup && _teardown
+   #!/bin/bash
+   arg_count=$#
+   [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
+
+debug +args:
+   just _run _debug {{ args }}
+
+configure_yubikey:
+   just _run _configure_yubikey
+
+_run +args:
    docker run --rm -it \
    -v $(pwd):/src \
    -v $(realpath Justfile):/src/Justfile \
@@ -28,32 +42,7 @@ pass +input:
    -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
    -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
    --user $UID:$UID \
-   {{ docker_image_dockerhub }} _pass {{ input }}
-
-_pass +input: _setup && _teardown
-   #!/bin/bash
-   arg_count=$#
-   [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
-
-debug +args:
-   docker run --rm -it \
-   -v $(pwd):/src \
-   -v $(realpath Justfile):/src/Justfile \
-   -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
-   -v /tmp:/tmp \
-   -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
-   --user $UID:$UID \
-   {{ docker_image_dockerhub }} _debug {{ args }}
-
-configure_yubikey:
-   docker run --rm -it \
-   -v $(pwd):/src \
-   -v $(realpath Justfile):/src/Justfile \
-   -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
-   -v /tmp:/tmp \
-   -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
-   --user $UID:$UID \
-   {{ docker_image_dockerhub }} _configure_yubikey
+   {{ docker_image_dockerhub }} {{ args }}
 
 _configure_yubikey:
    age-plugin-yubikey
