@@ -25,16 +25,16 @@ pass +input:
 debug +args:
    just _run _debug {{ args }}
 
-install secrets_repo:
+install secrets_repository:
    just configure_yubikey
-   just configure_secrets_repo {{ secrets_repo }}
+   just configure_secrets_repo {{ secrets_repository }}
 
 configure_yubikey:
    just _run _configure_yubikey
 
 # Set the secrets repository. Example: just configure_secrets_repo git@github.com:myuser/myrepo.git
-configure_secrets_repo secrets_repo:
-   sed -e 's|^\(secrets_repo := \)\(.*\)|\1{{ secrets_repo }}|' Justfile
+configure_secrets_repo secrets_repository:
+   sed -e 's|^\(secrets_repo := \)\(.*\)|\1{{ secrets_repository }}|' Justfile
 
 _run +args:
    docker run --rm -it \
