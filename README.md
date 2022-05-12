@@ -17,9 +17,10 @@ The private part is directly storeable on a YubiKey. Users are asked for a PIN f
 
 OS: Linux.
 
-Prerequisites: [`just`](https://github.com/casey/just) in `$PATH`.
-
-Edit the `Justfile` `secrets_repo` field to point to a repository to store the secrets to.
+Prerequisites:
+* [`just`](https://github.com/casey/just) in `$PATH`.
+* Preconfigured YubiKeys. See [this](https://github.com/str4d/age-plugin-yubikey#configuration) for more info.
+* Edit the `Justfile` `secrets_repo` field to point to a repository to store the secrets to.
 
 ## Usage
 
