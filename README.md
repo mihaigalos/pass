@@ -21,8 +21,7 @@ OS: Linux.
 
 Prerequisites:
 * [`just`](https://github.com/casey/just) in `$PATH`.
-* Run `just configure_yubikey`.
-* Run `just configure_secrets_repo <your_git_secrets_repository>`.
+* Run `just install`.
 
 ## Usage
 
