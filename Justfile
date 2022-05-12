@@ -31,9 +31,7 @@ pass +input:
 
 _pass +input: _setup && _teardown
    #!/bin/bash
-   set -x
    arg_count=$#
-   git clone --quiet {{ secrets_repo }} secrets
    [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
 
 debug +args:
