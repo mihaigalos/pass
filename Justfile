@@ -18,14 +18,9 @@ help:
 build_docker:
     docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
 
-# Get the password for the requested input.
+# Get or set the password for the requested input.
 pass +input:
    just _run _pass {{ input }}
-
-_pass +input: _setup && _teardown
-   #!/bin/bash
-   arg_count=$#
-   [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
 
 debug +args:
    just _run _debug {{ args }}
@@ -46,6 +41,11 @@ _run +args:
 
 _configure_yubikey:
    age-plugin-yubikey
+
+_pass +input: _setup && _teardown
+   #!/bin/bash
+   arg_count=$#
+   [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
 
 _encrypt +input:
    #!/bin/bash
