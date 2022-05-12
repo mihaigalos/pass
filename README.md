@@ -4,7 +4,7 @@ Yubikey-encrypted Secrets-as-Code for git.
 
 ## Why?
 
-Online password managers have already reached maturity, however 'git' can be used to store encrypted passwords and files just fine.
+Online password managers have already reached maturity, however `git` can be used to store encrypted passwords and files just fine.
 
 The i.e. GitHub repo containing them can be private.
 
@@ -28,7 +28,7 @@ just pass add mysecretname # Asks for a password, encrypts it to a file "mysecre
 just pass mysecretname # Decrypts the secret file "mysecretname".
 ```
 
-# Acknowlegements
+# Acknowledgements
 
 `pass` is just a thin wrapper for the following awesome technologies:
 
