@@ -31,7 +31,7 @@ just pass mysecretname # Decrypts the secret file "mysecretname".
 
 # Acknowledgements
 
-`pass` is just a thin wrapper for the following awesome technologies:
+`pass` is just a thin wrapper around the following awesome technologies:
 
 * [`YubiKey`](https://www.yubico.com/products/yubikey-5-overview/) - Strong hardware encryption.
 * [`age-plugin-yubikey`](https://github.com/str4d/age-plugin-yubikey) - YubiKey plugin for `rage`.
