@@ -1,6 +1,6 @@
 # pass
 
-Yubikey-encrypted Secrets-as-Code for git.
+YubiKey-encrypted Secrets-as-Code for git.
 
 ## Why?
 
