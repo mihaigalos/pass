@@ -34,7 +34,7 @@ configure_yubikey:
 
 # Set the secrets repository. Example: just configure_secrets_repo git@github.com:myuser/myrepo.git
 configure_secrets_repo secrets_repository:
-   sed -i -e 's|^\(secrets_repo := \)\(.*\)|\1{{ secrets_repository }}|' Justfile
+   sed -i -e 's|^\(secrets_repo := \)\(.*\)|\1"{{ secrets_repository }}"|' Justfile
 
 _run +args:
    docker run --rm -it \
