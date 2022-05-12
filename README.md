@@ -32,6 +32,6 @@ just pass mysecretname # Decrypts the secret file "mysecretname".
 
 `pass` is just a thin wrapper for the following awesome technologies:
 
-* [`rage`](https://github.com/str4d/rage) - a Rust implementation of the `age` spec.
-* [`age-plugin-yubikey`](https://github.com/str4d/age-plugin-yubikey) - YubiKey plugin for `rage`.
 * [`YubiKey`](https://www.yubico.com/products/yubikey-5-overview/) - Strong hardware encryption.
+* [`age-plugin-yubikey`](https://github.com/str4d/age-plugin-yubikey) - YubiKey plugin for `rage`.
+* [`rage`](https://github.com/str4d/rage) - a Rust implementation of the `age` spec.
