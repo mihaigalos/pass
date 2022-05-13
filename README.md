@@ -27,7 +27,7 @@ Prerequisites:
 
 ```bash
 $ just pass add mysecretname # Asks for a password, encrypts it to a file "mysecretname" and commit+pushes it to the secrets repository.
-$ just pass add_file /tmp/mysecretfile # Asks for a password, encrypts it to a file "mysecretfile" and commit+pushes it to the secrets repository.
+$ just pass add_file /tmp/mysecretfile # Encrypts the given file and commit+pushes it to the secrets repository.
 $ just pass mysecretname # Decrypts the secret file "mysecretname".
 ```
 
