@@ -68,11 +68,11 @@ _encrypt +input:
       echo
       echo "🔑 Plugin all YubiKeys now to store private keys. It is assumed they are already set up using: https://github.com/str4d/age-plugin-yubikey#configuration"
       read -p "Press ENTER to continue."
+      age-plugin-yubikey --identity > identities
       identities=$(age-plugin-yubikey --identity | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
    else
       identities=$(cat identities | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
    fi
-
 
    [ $1 = "add" ] && echo "${password}" | rage ${identities} -o ${secret_file} || true
    [ $1 = "add_file" ] && cat $2 | rage ${identities} -o $(basename $2) || true
