@@ -105,7 +105,7 @@ test:
    ok() { echo -e "\e[1;32mOK\e[0m"; }
    highlight() { echo; echo -e "\e[1;37m${@}\e[0m"; }
    highlight --------------------- Testing encrypt ---------------------
-   just pass add test_secret_name
+   just pass add test_pass
    highlight --------------------- Testing decrypt ---------------------
-   just pass test_secret_name
+   just pass test_pass
 
