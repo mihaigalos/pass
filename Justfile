@@ -85,6 +85,7 @@ _decrypt +input:
    #!/bin/bash
    secret_file=$1
    cd secrets/
+   age-plugin-yubikey --identity > identity 2>/dev/null
    cat {{ input }} | rage -d -i identity
 
 _debug +args:
@@ -93,7 +94,6 @@ _debug +args:
 _setup:
    #!/bin/bash
    git clone --quiet {{ secrets_repo }} secrets
-   age-plugin-yubikey --identity > secrets/identity 2>/dev/null
 
 _teardown:
    rm -rf secrets/ identity
