@@ -85,7 +85,6 @@ _decrypt +input:
    #!/bin/bash
    secret_file=$1
    cd secrets/
-   age-plugin-yubikey --identity > identity
    cat {{ input }} | rage -d -i identity
 
 _debug +args:
