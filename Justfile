@@ -19,7 +19,7 @@ build_docker:
     docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
 
 # Get or set the password for the requested input.
-pass +input:
+@pass +input:
    just _run _pass {{ input }}
 
 debug +args:
@@ -36,7 +36,7 @@ configure_yubikey:
 configure_secrets_repo secrets_repository:
    sed -i -e 's|^\(secrets_repo := \)\(.*\)|\1"{{ secrets_repository }}"|' Justfile
 
-_run +args:
+@_run +args:
    docker run --rm -it \
    -v $(pwd):/src \
    -v $(realpath Justfile):/src/Justfile \
