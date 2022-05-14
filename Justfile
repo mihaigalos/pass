@@ -50,10 +50,8 @@ _run +args:
 _configure_yubikey:
    age-plugin-yubikey
 
-_pass +input: _setup && _teardown
-   #!/bin/bash
-   arg_count=$#
-   [[ $arg_count == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
+@_pass +input: _setup && _teardown
+   [[ $# == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
 
 _encrypt +input:
    #!/bin/bash
@@ -86,16 +84,17 @@ _decrypt +input:
    secret_file=$1
    cd secrets/
    age-plugin-yubikey --identity > identity 2>/dev/null
+   echo
    cat {{ input }} | rage -d -i identity
 
 _debug +args:
    bash -c "{{ args }}"
 
-_setup:
-   #!/bin/bash
+@_setup:
+   [ -d secrets ] && rm -rf secrets/ || true
    git clone --quiet {{ secrets_repo }} secrets
 
-_teardown:
+@_teardown:
    rm -rf secrets/ identity
 
 test:
