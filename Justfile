@@ -53,9 +53,7 @@ _configure_yubikey:
 
 _encrypt +input:
     #!/bin/bash
-    secret_file=$2 
-    echo -n "Password: " && read -s password
-    echo
+    [ $1 = "add" ] && secret_file=$2 &&  echo -n "Password: " && read -s password && echo || true
 
     cd secrets/
     git pull --ff-only --allow-unrelated-histories
