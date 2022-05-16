@@ -38,6 +38,7 @@ configure_secrets_repo secrets_repository:
     docker run --rm -it \
     -v $(pwd):/src \
     -v $(realpath Justfile):/src/Justfile:ro \
+    -v $(realpath $3):/tmp/$(basename $3):ro \
     -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
     -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
     -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
@@ -67,8 +68,9 @@ _encrypt +input:
        identities=$(cat identities | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
     fi
 
+    file_to_encrypt=$(echo $2 | sed "s/.*\///")
     [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${secret_file} || true
-    [ $1 = "add_file" ] && rage ${identities} -o $(basename $2) ../$2 || true
+    [ $1 = "add_file" ] && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
 
     git add .
     git commit -m "Edited ${secret_file}"
