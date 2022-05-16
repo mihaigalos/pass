@@ -20,7 +20,7 @@ build_docker:
 @pass +input:
     just _run _pass {{ input }}
 
-debug +args:
+debug +args: _setup && _teardown
     just _run _debug {{ args }}
 
 install secrets_repository:
@@ -37,9 +37,8 @@ configure_secrets_repo secrets_repository:
 @_run +args:
     docker run --rm -it \
     -v $(pwd):/src \
-    -v $(realpath Justfile):/src/Justfile \
+    -v $(realpath Justfile):/src/Justfile:ro \
     -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
-    -v /tmp:/tmp \
     -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
     -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
     --user $UID:$UID \
@@ -68,8 +67,8 @@ _encrypt +input:
        identities=$(cat identities | grep Recipient | sed -e "s/ //g" | cut -d':' -f2 | sed -e 's/^age\(.*\)/ -r age\1/g'  | tr -d '\n')
     fi
 
-    [ $1 = "add" ] && echo "${password}" | rage ${identities} -o ${secret_file} || true
-    [ $1 = "add_file" ] && cat $2 | rage ${identities} -o $(basename $2) || true
+    [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${secret_file} || true
+    [ $1 = "add_file" ] && rage ${identities} -o $(basename $2) ../$2 || true
 
     git add .
     git commit -m "Edited ${secret_file}"
