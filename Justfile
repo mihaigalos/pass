@@ -48,7 +48,7 @@ configure_secrets_repo secrets_repository:
 _configure_yubikey:
     age-plugin-yubikey
 
-@_pass +input: _setup && _teardown
+@_pass +input: _teardown _setup && _teardown
     [[ $# == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
 
 _encrypt +input:
