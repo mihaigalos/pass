@@ -1,6 +1,6 @@
 # pass
 
-YubiKey-encrypted Secrets-as-Code for git.
+YubiKey-sealed Secrets-as-Code for git.
 
 `pass` runs in the command line.
 
