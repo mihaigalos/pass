@@ -20,7 +20,7 @@ The private part is directly storeable on a YubiKey. Users are asked for a PIN f
 OS: Linux.
 
 Prerequisites:
-* [`just`](https://github.com/casey/just) in `d$PATH`.
+* [`just`](https://github.com/casey/just) in `$PATH`.
 * Run `just install <your secrets repo>`.
 
 ## Usage
