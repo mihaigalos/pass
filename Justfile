@@ -34,7 +34,7 @@ configure_yubikey:
 configure_secrets_repo secrets_repository:
     sed -i -e 's|^\(secrets_repo := \)\(.*\)|\1"{{ secrets_repository }}"|' Justfile
 
-@_run +args:
+_run +args:
     #!/bin/bash
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     docker run --rm -it \
@@ -72,7 +72,7 @@ _encrypt +input:
 
     file_to_encrypt=$(echo $2 | sed "s/.*\///")
     [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${file_to_encrypt} || true
-    [ $1 = "add_file" ] && ls -al /tmp && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
+    [ $1 = "add_file" ] && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
 
     git add .
     git commit -m "Edited ${file_to_encrypt}"
