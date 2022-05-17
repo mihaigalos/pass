@@ -20,7 +20,7 @@ The private part is directly storeable on a YubiKey. Users are asked for a PIN f
 OS: Linux.
 
 Prerequisites:
-* [`just`](https://github.com/casey/just) in `$PATH`.
+* [`just`](https://github.com/casey/just) in `d$PATH`.
 * Run `just install <your secrets repo>`.
 
 ## Usage
@@ -29,6 +29,11 @@ Prerequisites:
 $ just pass add mysecretname # Asks for a password, encrypts it to a file "mysecretname" and commit+pushes it to the secrets repository.
 $ just pass add_file /tmp/mysecretfile # Encrypts the given file and commit+pushes it to the secrets repository.
 $ just pass mysecretname # Decrypts the secret file "mysecretname".
+```
+Additionally, you can set an alias to get access to the functionality from any path in the shell:
+```bash
+$ echo 'alias pass="just --justfile ~/git/pass/Justfile pass"' > ~/.bashrc
+$ pass mysecretname # prints the secret
 ```
 
 # Acknowledgements
