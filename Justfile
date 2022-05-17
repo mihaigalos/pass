@@ -51,7 +51,7 @@ _configure_yubikey:
     age-plugin-yubikey
 
 @_pass +input: _teardown _setup && _teardown
-    [[ $# == 1 ]] && just _decrypt {{ input }} || just _encrypt {{ input }}
+    [[ $# -ne 1 ]] && just _encrypt {{ input }} || just _decrypt {{ input }}
 
 _encrypt +input:
     #!/bin/bash
@@ -80,11 +80,13 @@ _encrypt +input:
 
 _decrypt +input:
     #!/bin/bash
+    err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
     secret_file=$1
     cd secrets/
     age-plugin-yubikey --identity > identity 2>/dev/null
     echo
-    cat {{ input }} | rage -d -i identity
+    [ -f $secrets_file ] && cat $secret_file | rage -d -i identity || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
+
 
 _debug +args:
     bash -c "{{ args }}"
