@@ -71,11 +71,11 @@ _encrypt +input:
     fi
 
     file_to_encrypt=$(echo $2 | sed "s/.*\///")
-    [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${secret_file} || true
+    [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${file_to_encrypt} || true
     [ $1 = "add_file" ] && ls -al /tmp && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
 
     git add .
-    git commit -m "Edited ${secret_file}"
+    git commit -m "Edited ${file_to_encrypt}"
     git push
 
 _decrypt +input:
