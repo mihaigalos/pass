@@ -37,7 +37,7 @@ configure_secrets_repo secrets_repository:
 @_run +args:
     #!/bin/bash
     set -x
-    [ $# -lt 3 ] && pass_file="/tmp/pass_file" || pass_file=$3
+    ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     docker run --rm -it \
     -v $(pwd):/src \
     -v $(realpath Justfile):/src/Justfile:ro \
