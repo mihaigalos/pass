@@ -35,10 +35,13 @@ configure_secrets_repo secrets_repository:
     sed -i -e 's|^\(secrets_repo := \)\(.*\)|\1"{{ secrets_repository }}"|' Justfile
 
 @_run +args:
+    #!/bin/bash
+    set -x
+    [ $# -lt 3 ] && pass_file="/tmp/pass_file" || pass_file=$3
     docker run --rm -it \
     -v $(pwd):/src \
     -v $(realpath Justfile):/src/Justfile:ro \
-    -v $(realpath $3):/tmp/$(basename $3):ro \
+    -v $(realpath $pass_file):/tmp/$(basename $pass_file):ro \
     -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
     -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
     -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
@@ -53,6 +56,7 @@ _configure_yubikey:
 
 _encrypt +input:
     #!/bin/bash
+    set -x
     [ $1 = "add" ] && secret_file=$2 &&  echo -n "Password: " && read -s password && echo || true
 
     cd secrets/
@@ -70,7 +74,7 @@ _encrypt +input:
 
     file_to_encrypt=$(echo $2 | sed "s/.*\///")
     [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${secret_file} || true
-    [ $1 = "add_file" ] && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
+    [ $1 = "add_file" ] && ls -al /tmp && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
 
     git add .
     git commit -m "Edited ${secret_file}"
