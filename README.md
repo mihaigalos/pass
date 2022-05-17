@@ -32,7 +32,7 @@ $ just pass mysecretname # Decrypts the secret file "mysecretname".
 ```
 Additionally, you can set an alias to get access to the functionality from any path in the shell:
 ```bash
-$ echo 'alias pass="just --justfile ~/git/pass/Justfile pass"' > ~/.bashrc
+$ echo 'alias pass="just --justfile ~/git/pass/Justfile pass"' >> ~/.bashrc
 $ pass mysecretname # prints the secret
 ```
 
