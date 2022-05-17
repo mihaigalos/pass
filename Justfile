@@ -85,7 +85,7 @@ _decrypt +input:
     cd secrets/
     age-plugin-yubikey --identity > identity 2>/dev/null
     echo
-    [ -f $secrets_file ] && cat $secret_file | rage -d -i identity || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
+    [ -f $secret_file ] && cat $secret_file | rage -d -i identity || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
 
 
 _debug +args:
