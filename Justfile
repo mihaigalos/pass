@@ -36,7 +36,6 @@ configure_secrets_repo secrets_repository:
 
 @_run +args:
     #!/bin/bash
-    set -x
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     docker run --rm -it \
     -v $(pwd):/src \
@@ -56,7 +55,6 @@ _configure_yubikey:
 
 _encrypt +input:
     #!/bin/bash
-    set -x
     [ $1 = "add" ] && secret_file=$2 &&  echo -n "Password: " && read -s password && echo || true
 
     cd secrets/
