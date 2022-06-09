@@ -33,7 +33,20 @@ $ just pass mysecretname # Decrypts the secret file "mysecretname".
 Additionally, you can set an alias to get access to the functionality from any path in the shell:
 ```bash
 $ echo 'alias pass="just --justfile ~/git/pass/Justfile pass"' >> ~/.bashrc
-$ pass mysecretname # prints the secret
+$ pass mysecretname # Prints the secret
+```
+
+## Randompass
+
+If you wish, you can generate a new random password directly:
+```bash
+$ just pass random mysecretname
+```
+
+And of course you can use it with the above alias:
+```bash
+$ pass random mysecretname # Encrypts a random password to a mysecretname and commit+pushes to the secrets repository.
+$ pass mysecretname # Prints the secret.
 ```
 
 # Acknowledgements

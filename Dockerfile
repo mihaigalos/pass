@@ -30,6 +30,10 @@ RUN git clone --depth 1 https://github.com/casey/just.git \
     && cd just \
     && RUSTFLAGS="-C target-feature=-crt-static" cargo build --release
 
+RUN git clone --depth 1 https://github.com/mihaigalos/randompass.git \
+    && cd randompass \
+    && RUSTFLAGS="-C target-feature=-crt-static" cargo build --release
+
 FROM alpine:3.14 as tool
 
 ARG USER
@@ -45,6 +49,7 @@ RUN apk update \
 COPY --from=base /src/age-plugin-yubikey/target/release/age-plugin-yubikey /usr/local/bin/
 COPY --from=base /src/rage/target/release/rage* /usr/local/bin/
 COPY --from=base /src/just/target/release/just /usr/local/bin/
+COPY --from=base /src/randompass/target/release/randompass /usr/local/bin/
 
 RUN addgroup -S ${USER} -g 1000 && adduser -S ${USER} -G ${USER} -u 1000
 USER ${USER}

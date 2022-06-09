@@ -6,7 +6,7 @@ _default:
 
 secrets_repo := "git@github.com:mihaigalos/secrets.git"
 tool := "pass"
-docker_image_version := "0.0.1"
+docker_image_version := "0.0.2"
 docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
 
@@ -55,7 +55,8 @@ _configure_yubikey:
 
 _encrypt +input:
     #!/bin/bash
-    [ $1 = "add" ] && secret_file=$2 &&  echo -n "Password: " && read -s password && echo || true
+    [ $1 = "add" ] && echo -n "Password: " && read -s password && echo || true
+    [ $1 = "random" ] && password=$(randompass)  || true
 
     cd secrets/
     git pull --ff-only --allow-unrelated-histories
@@ -71,7 +72,7 @@ _encrypt +input:
     fi
 
     file_to_encrypt=$(echo $2 | sed "s/.*\///")
-    [ $1 = "add" ] && echo "${password}" | rage ${identities} -e -o ${file_to_encrypt} || true
+    [ $1 = "add" ] || [ $1 = "random" ] && echo "${password}" | rage ${identities} -e -o ${file_to_encrypt} || true
     [ $1 = "add_file" ] && rage ${identities} -o $file_to_encrypt /tmp/$file_to_encrypt || true
 
     git add .
