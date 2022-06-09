@@ -37,15 +37,19 @@ configure_secrets_repo secrets_repository:
 _run +args:
     #!/bin/bash
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
+    touch /tmp/randompass
     docker run --rm -it \
     -v $(pwd):/src \
-    -v $(realpath Justfile):/src/Justfile:ro \
     -v $(realpath $pass_file):/tmp/$(basename $pass_file):ro \
+    -v /tmp/randompass:/tmp/randompass \
+    -v $(realpath Justfile):/src/Justfile:ro \
     -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
     -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
     -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
     --user $UID:$UID \
     {{ docker_image_dockerhub }} {{ args }}
+    cat /tmp/randompass | xclip || true
+    rm /tmp/randompass
 
 _configure_yubikey:
     age-plugin-yubikey
@@ -78,6 +82,8 @@ _encrypt +input:
     git add .
     git commit -m "Edited ${file_to_encrypt}"
     git push
+
+    [ $1 = "random" ] && echo ${password} | tr -d '\r' | tr -d '\n' > /tmp/randompass || true
 
 _decrypt +input:
     #!/bin/bash

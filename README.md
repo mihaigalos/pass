@@ -49,6 +49,8 @@ $ pass random mysecretname # Encrypts a random password to a mysecretname and co
 $ pass mysecretname # Prints the secret.
 ```
 
+If `xclip` is installed, the contents of the random password are automatically placed in the clipboard.
+
 # Acknowledgements
 
 `pass` is just a thin wrapper around the following awesome technologies:
