@@ -48,7 +48,8 @@ _run +args:
     -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
     --user $UID:$UID \
     {{ docker_image_dockerhub }} {{ args }}
-    cat /tmp/randompass | xclip || true
+    unalias xclip
+    cat /tmp/randompass | xclip -selection clipboard || true
     rm /tmp/randompass
 
 _configure_yubikey:
