@@ -48,7 +48,7 @@ _run +args:
     -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
     --user $UID:$UID \
     {{ docker_image_dockerhub }} {{ args }}
-    unalias xclip
+    unalias xclip > /dev/null 2>&1 || true
     cat /tmp/randompass | xclip -selection clipboard || true
     rm /tmp/randompass
 
