@@ -40,7 +40,7 @@ _run +args:
     touch /tmp/randompass
     docker run --rm -it \
     -v $(pwd):/src \
-    -v $(realpath $pass_file):/tmp/$(basename $pass_file):ro \
+    -v $pass_file:/tmp/$(basename $pass_file):ro \
     -v /tmp/randompass:/tmp/randompass \
     -v $(realpath Justfile):/src/Justfile:ro \
     -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
