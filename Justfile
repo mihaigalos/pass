@@ -36,7 +36,9 @@ configure_secrets_repo secrets_repository:
 
 _run +args:
     #!/bin/bash
+    err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
+    [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
     touch /tmp/randompass
     docker run --rm -it \
     -v $(pwd):/src \
