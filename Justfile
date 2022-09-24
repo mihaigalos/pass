@@ -11,7 +11,7 @@ docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
 
 help:
-    cat README.md
+    cat README.md | less
 
 build_docker:
     docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
