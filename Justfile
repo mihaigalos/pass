@@ -41,15 +41,15 @@ _run +args:
     [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
     touch /tmp/randompass
     docker run --rm -it \
-    -v $(pwd):/src \
-    -v $pass_file:/tmp/$(basename $pass_file):ro \
-    -v /tmp/randompass:/tmp/randompass \
-    -v $(realpath Justfile):/src/Justfile:ro \
-    -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
-    -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
-    -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
-    --user $UID:$UID \
-    {{ docker_image_dockerhub }} {{ args }}
+        -v $(pwd):/src \
+        -v $pass_file:/tmp/$(basename $pass_file):ro \
+        -v /tmp/randompass:/tmp/randompass \
+        -v $(realpath Justfile):/src/Justfile:ro \
+        -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
+        -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
+        -v ~/.ssh:/home/{{ docker_user_repo }}/.ssh \
+        --user $UID:$UID \
+        {{ docker_image_dockerhub }} {{ args }}
     unalias xclip > /dev/null 2>&1 || true
     cat /tmp/randompass | xclip -selection clipboard || true
     rm /tmp/randompass
