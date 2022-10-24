@@ -16,6 +16,9 @@ help:
 build_docker:
     docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
 
+push:
+    docker push {{ docker_image_dockerhub }}
+
 # Get or set the password for the requested input.
 @pass +input:
     just _run _pass {{ input }}
