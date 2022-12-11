@@ -20,7 +20,7 @@ push:
     docker push {{ docker_image_dockerhub }}
 
 # Get or set the password for the requested input.
-@pass +input:
+@pass +input: _teardown _setup && _teardown
     just _run _pass {{ input }}
 
 debug +args: _setup && _teardown
@@ -43,7 +43,7 @@ _run +args:
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
     touch /tmp/randompass
-    docker run --rm -it \
+    sudo docker run --rm -it \
         -v $(pwd):/src \
         -v $pass_file:/tmp/$(basename $pass_file):ro \
         -v /tmp/randompass:/tmp/randompass \
@@ -60,7 +60,7 @@ _run +args:
 _configure_yubikey:
     age-plugin-yubikey
 
-@_pass +input: _teardown _setup && _teardown
+@_pass +input:
     [[ $# -ne 1 ]] && just _encrypt {{ input }} || just _decrypt {{ input }}
 
 _encrypt +input:
