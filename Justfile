@@ -44,6 +44,7 @@ _run +args:
     [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
     touch /tmp/randompass
     sudo docker run --rm -it \
+        --net=host \
         -v $(pwd):/src \
         -v $pass_file:/tmp/$(basename $pass_file):ro \
         -v /tmp/randompass:/tmp/randompass \
