@@ -6,7 +6,7 @@ _default:
 
 secrets_repo := "git@github.com:mihaigalos/secrets.git"
 tool := "pass"
-docker_image_version := "0.0.2"
+docker_image_version := "0.0.3"
 docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
 
@@ -14,10 +14,10 @@ help:
     cat README.md | less
 
 build_docker:
-    docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
+    sudo docker build --network=host --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
 
 push:
-    docker push {{ docker_image_dockerhub }}
+    sudo docker push {{ docker_image_dockerhub }}
 
 # Get or set the password for the requested input.
 @pass +input: _teardown _setup && _teardown
