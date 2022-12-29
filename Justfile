@@ -10,6 +10,7 @@ docker_image_version := "0.0.3"
 docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
 docker_image_dockerhub_latest := docker_user_repo + "/" + tool + ":latest"
+clear_timer := "15" # seconds
 
 help:
     cat README.md | less
@@ -49,12 +50,12 @@ _run +args:
     err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
-    touch /tmp/randompass
+    touch /tmp/pass
     sudo docker run --rm -it \
         --net=host \
         -v $(pwd):/src \
         -v $pass_file:/tmp/$(basename $pass_file):ro \
-        -v /tmp/randompass:/tmp/randompass \
+        -v /tmp/pass:/tmp/pass \
         -v $(realpath Justfile):/src/Justfile:ro \
         -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
         -v ~/.gitconfig:/home/{{ docker_user_repo }}/.gitconfig \
@@ -62,8 +63,12 @@ _run +args:
         --user $UID:$UID \
         {{ docker_image_dockerhub }} {{ args }}
     unalias xclip > /dev/null 2>&1 || true
-    cat /tmp/randompass | xclip -selection clipboard || true
-    rm /tmp/randompass
+    cat /tmp/pass | tr -d '\n' | xclip -selection clipboard || true
+    rm /tmp/pass
+    echo
+    echo "Password copied to clipboard. Clearing in {{ clear_timer }}s."
+    sleep {{ clear_timer }}
+    echo "" | xclip -selection clipboard 
 
 _configure_yubikey:
     age-plugin-yubikey
@@ -97,7 +102,7 @@ _encrypt +input:
     git commit -m "Edited ${file_to_encrypt}"
     git push
 
-    [ $1 = "random" ] && echo ${password} | tr -d '\r' | tr -d '\n' > /tmp/randompass || true
+    [ $1 = "random" ] && echo ${password} | tr -d '\r' | tr -d '\n' > /tmp/pass || true
 
 _decrypt +input:
     #!/bin/bash
@@ -107,11 +112,9 @@ _decrypt +input:
     cd secrets/
     age-plugin-yubikey --identity > identity 2>/dev/null
     echo
-    [ -f $secret_file ] && cat $secret_file | rage -d -i identity > /tmp/decrypted || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
-    cat /tmp/decrypted | qr2term
-    cat /tmp/decrypted
-    rm /tmp/decrypted
-
+    [ -f $secret_file ] && cat $secret_file | rage -d -i identity > /tmp/pass || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
+    cat /tmp/pass | qr2term
+    cat /tmp/pass
 
 _debug +args:
     bash -c "{{ args }}"
