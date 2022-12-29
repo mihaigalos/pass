@@ -50,6 +50,8 @@ _run +args:
     err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
+    [ $2 = "list" ] && name=$(ls -1 --color=never secrets/ | fzf | tr -d '\n' | tr -d '\r') && just _run _pass $name && exit 0 || true
+
     touch /tmp/pass
     sudo docker run --rm -it \
         --net=host \
@@ -65,7 +67,6 @@ _run +args:
     unalias xclip > /dev/null 2>&1 || true
     cat /tmp/pass | tr -d '\n' | xclip -selection clipboard || true
     rm /tmp/pass
-    [ $2 = "list" ] && exit 0 || true
 
     echo
     echo "Password copied to clipboard. Clearing in {{ clear_timer }}s."
@@ -110,7 +111,7 @@ _decrypt +input:
     #!/bin/bash
     err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
     secret_file=$1
-    [ $1 = "list" ] && ls -1 secrets && exit 0 || true
+    [ $1 = "list" ] && exit 0 || true
     cd secrets/
     age-plugin-yubikey --identity > identity 2>/dev/null
     echo
