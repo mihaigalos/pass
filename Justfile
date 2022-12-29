@@ -65,6 +65,8 @@ _run +args:
     unalias xclip > /dev/null 2>&1 || true
     cat /tmp/pass | tr -d '\n' | xclip -selection clipboard || true
     rm /tmp/pass
+    [ $2 = "list" ] && exit 0 || true
+
     echo
     echo "Password copied to clipboard. Clearing in {{ clear_timer }}s."
     sleep {{ clear_timer }}
@@ -125,9 +127,6 @@ _debug +args:
 
 @_teardown:
     rm -rf secrets/ identity
-
-@list: _teardown _setup && _teardown
-    ls -l secrets
 
 test:
     #!/bin/bash
