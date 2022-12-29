@@ -4,6 +4,8 @@ YubiKey-sealed Secrets-as-Code for git.
 
 `pass` runs in the command line.
 
+![example](screenshots/pass.gif)
+
 ## Why?
 
 Online password managers have already reached maturity, however `git` can be used to store encrypted passwords and files just fine.
