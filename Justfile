@@ -50,7 +50,7 @@ _run +args:
     err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
     ([ $# -ge 3 ] && [ $2 = "add_file" ]) && pass_file=$3 || pass_file="/tmp/pass_file"
     [[ $pass_file =~ ^/.* ]] && true || err 'Need an absolute file for the input file (just limitation). Use $(realpath file) instead.'
-    [ $2 = "list" ] && name=$(ls -1 --color=never secrets/ | fzf | tr -d '\n' | tr -d '\r') && just _run _pass $name && exit 0 || true
+    [ $2 = "list" ] && just _list && exit 0 || true
 
     touch /tmp/pass
     sudo docker run --rm -it \
@@ -128,6 +128,9 @@ _debug +args:
 
 @_teardown:
     rm -rf secrets/ identity
+
+@_list:
+    [ -x "$(command -v fzf)" ] && name=$(ls -1 --color=never secrets/ | fzf | tr -d '\n' | tr -d '\r') && just _run _pass $name || ls -1 --color=never secrets/
 
 test:
     #!/bin/bash
