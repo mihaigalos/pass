@@ -9,15 +9,22 @@ tool := "pass"
 docker_image_version := "0.0.3"
 docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
+docker_image_dockerhub_latest := docker_user_repo + "/" + tool + ":latest"
 
 help:
     cat README.md | less
 
 build_docker:
-    sudo docker build --network=host --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
+    sudo docker build \
+        --network=host \
+        --build-arg=USER={{ docker_user_repo }} \
+        -t {{ docker_image_dockerhub }} \
+        -t {{ docker_image_dockerhub_latest }} \
+        .
 
 push:
     sudo docker push {{ docker_image_dockerhub }}
+    sudo docker push {{ docker_image_dockerhub_latest }}
 
 # Get or set the password for the requested input.
 @pass +input: _teardown _setup && _teardown
