@@ -6,18 +6,25 @@ _default:
 
 secrets_repo := "git@github.com:mihaigalos/secrets.git"
 tool := "pass"
-docker_image_version := "0.0.2"
+docker_image_version := "0.0.3"
 docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
+docker_image_dockerhub_latest := docker_user_repo + "/" + tool + ":latest"
 
 help:
     cat README.md | less
 
 build_docker:
-    docker build  --build-arg=USER={{ docker_user_repo }} -t {{ docker_image_dockerhub }} .
+    sudo docker build \
+        --network=host \
+        --build-arg=USER={{ docker_user_repo }} \
+        -t {{ docker_image_dockerhub }} \
+        -t {{ docker_image_dockerhub_latest }} \
+        .
 
 push:
-    docker push {{ docker_image_dockerhub }}
+    sudo docker push {{ docker_image_dockerhub }}
+    sudo docker push {{ docker_image_dockerhub_latest }}
 
 # Get or set the password for the requested input.
 @pass +input: _teardown _setup && _teardown
@@ -100,7 +107,10 @@ _decrypt +input:
     cd secrets/
     age-plugin-yubikey --identity > identity 2>/dev/null
     echo
-    [ -f $secret_file ] && cat $secret_file | rage -d -i identity || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
+    [ -f $secret_file ] && cat $secret_file | rage -d -i identity > /tmp/decrypted || err "ERROR: File $secret_file not present in {{ secrets_repo }}"
+    cat /tmp/decrypted | qr2term
+    cat /tmp/decrypted
+    rm /tmp/decrypted
 
 
 _debug +args:
