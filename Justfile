@@ -10,6 +10,7 @@ docker_image_version := "0.0.3"
 docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":" + docker_image_version
 docker_image_dockerhub_latest := docker_user_repo + "/" + tool + ":latest"
+clear_timer := "15" # seconds
 
 help:
     cat README.md | less
@@ -64,6 +65,10 @@ _run +args:
     unalias xclip > /dev/null 2>&1 || true
     cat /tmp/pass | tr -d '\n' | xclip -selection clipboard || true
     rm /tmp/pass
+    echo
+    echo "Password copied to clipboard. Clearing in {{ clear_timer }}s."
+    sleep {{ clear_timer }}
+    echo "" | xclip -selection clipboard 
 
 _configure_yubikey:
     age-plugin-yubikey
