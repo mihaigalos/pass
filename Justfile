@@ -95,6 +95,7 @@ _encrypt +input:
 _decrypt +input:
     #!/bin/bash
     err() { echo -e "\e[1;31m${@}\e[0m" >&2; just _teardown; exit 1; }
+    secret_file=$1
     [ $1 = "list" ] && ls -1 secrets && exit 0 || true
     cd secrets/
     age-plugin-yubikey --identity > identity 2>/dev/null
