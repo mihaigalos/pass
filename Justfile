@@ -70,8 +70,7 @@ _run +args:
 
     echo
     echo "Password copied to clipboard. Clearing in {{ clear_timer }}s."
-    sleep {{ clear_timer }}
-    echo "" | xclip -selection clipboard 
+    sleep {{ clear_timer }} && echo "" | xclip -selection clipboard && clear
 
 _configure_yubikey:
     age-plugin-yubikey
