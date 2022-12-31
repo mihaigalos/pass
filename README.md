@@ -31,6 +31,7 @@ Prerequisites:
 $ just pass add mysecretname # Asks for a password, encrypts it to a file "mysecretname" and commit+pushes it to the secrets repository.
 $ just pass add_file $(realpath mysecretfile) # Encrypts the given file (needs full path) and commit+pushes it to the secrets repository.
 $ just pass mysecretname # Decrypts the secret file "mysecretname".
+$ just pass list # list all known passwords. Feeds to fzf if installed.
 ```
 Additionally, you can set an alias to get access to the functionality from any path in the shell:
 ```bash
