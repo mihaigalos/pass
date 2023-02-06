@@ -104,7 +104,7 @@ _encrypt +input:
     git commit -m "Edited ${file_to_encrypt}"
     git push
 
-    [ $1 = "random" ] && echo ${password} | tr -d '\r' | tr -d '\n' > /tmp/pass || true
+    [ $1 = "random" ] && echo ${password} | tr -d '\r' | tr -d '\n' > /tmp/pass && cat /tmp/pass | qr2term || true
 
 _decrypt +input:
     #!/bin/bash
