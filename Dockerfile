@@ -1,6 +1,6 @@
 # docker run --rm -it -v $(pwd):/src -v /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm mihaigalos/pass
 
-FROM rust:alpine3.17 as base
+FROM rust:alpine as base
 
 ARG USER
 
@@ -9,6 +9,7 @@ RUN apk update \
         git \
         gcc \
         g++ \
+        gpg \
         pcsc-lite-dev \
         openssl \
         openssl-dev \
@@ -38,7 +39,7 @@ RUN git clone --depth 1 https://github.com/mihaigalos/randompass.git \
     && cd randompass \
     && RUSTFLAGS="-C target-feature=-crt-static" cargo build --release
 
-FROM alpine:3.17 as tool
+FROM alpine as tool
 
 ARG USER
 

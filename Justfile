@@ -15,10 +15,12 @@ clear_timer := "15" # seconds
 help:
     cat README.md | less
 
-build_docker:
-    sudo docker build \
+build_docker: #setup
+    sudo docker buildx build \
         --network=host \
         --build-arg=USER={{ docker_user_repo }} \
+        --output type=image,name={{ docker_image_dockerhub }},push=false \
+        --platform=linux/amd64,linux/arm64 \
         -t {{ docker_image_dockerhub }} \
         -t {{ docker_image_dockerhub_latest }} \
         .
@@ -44,6 +46,22 @@ configure_yubikey:
 # Set the secrets repository. Example: just configure_secrets_repo git@github.com:myuser/myrepo.git
 configure_secrets_repo secrets_repository:
     sed -i -e 's|^\(secrets_repo := \)\(.*\)|\1"{{ secrets_repository }}"|' Justfile
+
+setup:
+    #! /bin/bash
+    sudo apt update
+    sudo apt-get install -y binfmt-support qemu-user-static
+    sudo apt-get install -y docker.io
+    sudo usermod -aG docker $USER
+
+    sudo apt-get install -y jq
+    mkdir -p ~/.docker/cli-plugins
+    BUILDX_URL=$(curl https://api.github.com/repos/docker/buildx/releases/latest |  jq  '.assets[].browser_download_url' | grep linux-arm64)
+    wget $BUILDX_URL -O ~/.docker/cli-plugins/docker-build
+    chmod +x ~/.docker/cli-plugins/docker-buildx
+
+    docker buildx create --use --name mybuilder --driver-opt network=host --buildkitd-flags '--allow-insecure-entitlement network.host'
+    docker buildx inspect --bootstrap
 
 _run +args:
     #!/bin/bash
