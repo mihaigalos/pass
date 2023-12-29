@@ -39,7 +39,7 @@ RUN git clone --depth 1 https://github.com/mihaigalos/randompass.git \
     && cd randompass \
     && RUSTFLAGS="-C target-feature=-crt-static" cargo build --release
 
-FROM alpine as tool
+FROM alpine:3.18 as tool
 
 ARG USER
 
